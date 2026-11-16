@@ -146,13 +146,13 @@ The database is `backend/undercover.db`, which git ignores because of `*.db`. Th
 
 **Why:** the queue is the handlers' starting point. Isolating the end-to-end tests now means the later tests can safely decide claims.
 
-- [ ] Vitest: the queue page renders the claims and the status counts from a stubbed API; `format.ts` gives `$1,250.00` for 1250 and labels for every status and claim type
-- [ ] Playwright e2e: the queue shows 25 claims, and clicking `CLM-1001` opens `/claims/CLM-1001`
-- [ ] Playwright MCP on `http://localhost:5173`: the queue shows 25 rows with status badges in the brand colors and amounts such as `$420.00`
-- [ ] Playwright MCP: the page background is `#F0F4F5` in light mode and `#04232E` in dark mode (by emulating the color scheme), and `document.fonts` has Instrument Sans and JetBrains Mono loaded
-- [ ] Playwright MCP: after `uv run -m agent CLM-1001` (or a stand-in API call), the row's status changes without a page reload
-- [ ] `npm run check:ts` and `npm run e2e` pass, with vitest coverage at 80% or more
-- [ ] Committed, with the pre-commit hook passing
+- [x] Vitest: the queue page renders the claims and the status counts from a stubbed API; `format.ts` gives `$1,250.00` for 1250 and labels for every status and claim type
+- [x] Playwright e2e: the queue shows 25 claims, and clicking `CLM-1001` opens `/claims/CLM-1001`
+- [x] Playwright MCP on `http://localhost:5173`: the queue shows 25 rows with status badges in the brand colors and amounts such as `$420.00`
+- [x] Playwright MCP: the page background is `#F0F4F5` in light mode and `#04232E` in dark mode (by emulating the color scheme), and `document.fonts` has Instrument Sans and JetBrains Mono loaded
+- [x] Playwright MCP: after `uv run -m agent CLM-1001` (or a stand-in API call), the row's status changes without a page reload
+- [x] `npm run check:ts` and `npm run e2e` pass, with vitest coverage at 80% or more
+- [x] Committed, with the pre-commit hook passing
 
 ## Phase 5: the claim page, the agent's steps and the instructions
 

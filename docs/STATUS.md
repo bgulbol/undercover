@@ -1,6 +1,6 @@
 # Status
 
-The pilot is being built from `docs/PLAN.md`. Done so far: Phases 1 to 3.
+The pilot is being built from `docs/PLAN.md`. Done so far: Phases 1 to 4.
 
 ## What's built
 
@@ -10,7 +10,8 @@ The pilot is being built from `docs/PLAN.md`. Done so far: Phases 1 to 3.
   - The sign-off rule: `pay_claim` refuses any amount over $1,000 with a 403, and refuses with a 409 an amount that isn't the approved payout, a second payment or a claim that isn't approved.
   - `backend/instructions.md`: the agent's instructions, served by `get_instructions`.
 - `agent/`: the UnderCover Agent, LangChain's `create_agent` on OpenRouter (`openai/gpt-6-luna` at low effort, or `MODEL_NAME`). Its six tools each wrap one API operation of the same name, and a refused call comes back to the model as text. `run(claim_id, thread_id)` starts the claim, fetches the instructions and posts each step to the backend as it happens.
-- `dashboard/`: still the skeleton page that shows whether the backend is up.
+- `dashboard/`: React with React Router, in the brand's fonts and colors, in light and dark mode. The queue page shows a count for each status and every claim with its status, decision and payout, and refreshes every 2 seconds. Each claim links to its own page, which so far shows its status and summary.
+- `e2e/`: Playwright runs its own backend on port 8001, on `e2e/e2e.db` reseeded every run, and its own dashboard on port 5174, so the tests never touch the dev queue.
 
 ## How to run it
 
