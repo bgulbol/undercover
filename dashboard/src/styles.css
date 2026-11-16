@@ -242,3 +242,161 @@ th.number {
 .notice {
   color: var(--muted);
 }
+
+.back {
+  justify-self: start;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lead {
+  margin: -0.5rem 0 0;
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.column {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.35rem 1.25rem;
+  margin: 0;
+}
+
+.facts dt {
+  color: var(--muted);
+}
+
+.facts dd {
+  margin: 0;
+}
+
+.decision-head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.payout {
+  font-family: var(--mono);
+  font-size: 1.75rem;
+  font-weight: 500;
+}
+
+tr.total td {
+  font-weight: 600;
+}
+
+.documents {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.document {
+  background: var(--sunk);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+}
+
+.document p {
+  margin: 0.4rem 0 0;
+}
+
+.steps,
+.history {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 0.7rem minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-top: 0.4rem;
+  border-radius: 999px;
+}
+
+.dot.sea-green {
+  background: var(--sea-green);
+}
+
+.dot.marigold {
+  background: var(--marigold);
+}
+
+.dot.coral {
+  background: var(--coral);
+}
+
+.dot.cerulean {
+  background: var(--cerulean);
+}
+
+.dot.raspberry {
+  background: var(--raspberry);
+}
+
+.step-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.step-message {
+  margin: 0.2rem 0 0;
+}
+
+details summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.step-detail {
+  max-height: 16rem;
+  overflow: auto;
+  margin: 0.4rem 0 0;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: var(--sunk);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.instructions {
+  white-space: pre-wrap;
+}

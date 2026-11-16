@@ -32,6 +32,16 @@ export function sentence(code: string): string {
   return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
+const ADD_ONS = new Map([
+  ["adventure_sports", "Adventure Sports"],
+  ["pre_existing_waiver", "Pre-Existing Condition Waiver"],
+  ["electronics_plus", "Electronics Plus"],
+]);
+
+export function addOn(code: string): string {
+  return ADD_ONS.get(code) ?? sentence(code);
+}
+
 export const STATUSES: Status[] = [
   "waiting",
   "in_progress",

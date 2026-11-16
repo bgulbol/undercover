@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import type { Claim, ClaimSummary } from "./api";
+import type { Claim, ClaimSummary, Customer, Policy, Step } from "./api";
 
 /** Answer each `fetch` from these responses, keyed by path, or with a 404. */
 export function stubApi(responses: Record<string, unknown>) {
@@ -84,3 +84,72 @@ export const CLAIM: Claim = {
   paid_amount: null,
   paid_at: null,
 };
+
+export const POLICY: Policy = {
+  policy_id: "POL-2001",
+  customer_id: "CUS-3001",
+  plan: "premium",
+  add_ons: ["electronics_plus"],
+  purchased_on: "2026-04-22",
+  sold_through: "Meridian Air checkout",
+  trip: {
+    destination: "Rome, Italy",
+    departs_on: "2026-06-10",
+    returns_on: "2026-06-18",
+    trip_cost: 3100,
+  },
+  travelers: ["Maya Patel"],
+  status: "active",
+};
+
+export const CUSTOMER: Customer = {
+  customer_id: "CUS-3001",
+  name: "Maya Patel",
+  customer_since: "2023-04-11",
+  previous_claims: [
+    {
+      claim_id: "CLM-0412",
+      filed_on: "2024-08-19",
+      incident_date: "2024-08-09",
+      claim_type: "baggage_delay",
+      summary: "Checked bag arrived 30 hours late in Lisbon",
+      outcome: "approved",
+      amount_paid: 140,
+    },
+  ],
+};
+
+function step(
+  step_id: number,
+  kind: Step["kind"],
+  name: string,
+  content: string,
+): Step {
+  return {
+    step_id,
+    claim_id: "CLM-1001",
+    thread_id: "thread-1",
+    kind,
+    name,
+    content,
+    created_at: "2026-11-16T15:04:05+00:00",
+  };
+}
+
+export const STEPS: Step[] = [
+  step(1, "tool_call", "get_claim", '{"claim_id": "CLM-1001"}'),
+  step(2, "tool_result", "get_claim", '{"claim_id": "CLM-1001"}'),
+  step(3, "tool_call", "pay_claim", '{"amount": 1150}'),
+  step(4, "tool_result", "pay_claim", "Refused (403): needs a sign-off"),
+  step(5, "message", "", "Approved for $1,150.00, waiting for sign-off."),
+];
+
+/** The API for CLM-1001, as `claim` and `steps` leave it. */
+export function claimApi(claim: Claim, steps: Step[] = []) {
+  return stubApi({
+    "/api/claims/CLM-1001": claim,
+    "/api/claims/CLM-1001/steps": steps,
+    "/api/policies/POL-2001": POLICY,
+    "/api/customers/CUS-3001": CUSTOMER,
+  });
+}

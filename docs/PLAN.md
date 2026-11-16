@@ -170,14 +170,14 @@ The database is `backend/undercover.db`, which git ignores because of `*.db`. Th
 
 **Why:** this is where a handler reviews the agent's work, so the decision and its reasons sit next to the evidence. Plain labels for the steps follow the brand's "no jargon", and the raw details are there for anyone who wants them.
 
-- [ ] Vitest: the claim page renders a waiting claim, an in-progress claim with steps, an approved claim waiting for sign-off with its payment held, and a declined claim; the instructions page renders the text
-- [ ] Playwright e2e: a stand-in agent approves `CLM-1002` for $1,150.00 and tries to pay. The claim page shows "Waiting for sign-off", "Approved", `$1,150.00`, the reason, the policy section, the payment held for sign-off and a "Payment refused" step
-- [ ] Playwright e2e: a stand-in agent approves and pays a claim for $420.00, and the claim page shows it decided and paid
-- [ ] Playwright e2e: the instructions page shows the instructions and has no editable field
-- [ ] Playwright MCP: with `/claims/CLM-1004` open, running `uv run -m agent CLM-1004` adds steps to the page one by one while the status reads "In progress", then shows the decision. Snapshots taken during the run show the number of steps growing
-- [ ] Playwright MCP: the claim page reads well in light and dark mode
-- [ ] `npm run check:ts` and `npm run e2e` pass, with vitest coverage at 80% or more
-- [ ] Committed, with the pre-commit hook passing
+- [x] Vitest: the claim page renders a waiting claim, an in-progress claim with steps, an approved claim waiting for sign-off with its payment held, and a declined claim; the instructions page renders the text
+- [x] Playwright e2e: a stand-in agent approves `CLM-1002` for $1,150.00 and tries to pay. The claim page shows "Waiting for sign-off", "Approved", `$1,150.00`, the reason, the policy section, the payment held for sign-off and a "Payment refused" step
+- [x] Playwright e2e: a stand-in agent approves and pays a claim for $420.00, and the claim page shows it decided and paid
+- [x] Playwright e2e: the instructions page shows the instructions and has no editable field
+- [x] Playwright MCP: with `/claims/CLM-1004` open, running `uv run -m agent CLM-1004` adds steps to the page one by one while the status reads "In progress", then shows the decision. Snapshots taken during the run show the number of steps growing
+- [x] Playwright MCP: the claim page reads well in light and dark mode
+- [x] `npm run check:ts` and `npm run e2e` pass, with vitest coverage at 80% or more
+- [x] Committed, with the pre-commit hook passing
 
 ## Phase 6: the pilot end to end
 

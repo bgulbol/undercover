@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 
 export const POLL_MS = 2000;
 
-/** Load now and every two seconds. `load` must keep its identity between renders. */
-export function usePolling<T>(load: () => Promise<T>) {
+function useApi<T>(load: () => Promise<T>, everyMs: number | null) {
   const [data, setData] = useState<T>();
   const [failed, setFailed] = useState(false);
 
@@ -22,12 +21,22 @@ export function usePolling<T>(load: () => Promise<T>) {
         });
     };
     tick();
-    const timer = setInterval(tick, POLL_MS);
+    const timer = everyMs === null ? undefined : setInterval(tick, everyMs);
     return () => {
       active = false;
       clearInterval(timer);
     };
-  }, [load]);
+  }, [load, everyMs]);
 
   return { data, failed };
+}
+
+/** Load now and every two seconds. `load` must keep its identity between renders. */
+export function usePolling<T>(load: () => Promise<T>) {
+  return useApi(load, POLL_MS);
+}
+
+/** Load once. `load` must keep its identity between renders. */
+export function useLoad<T>(load: () => Promise<T>) {
+  return useApi(load, null);
 }
