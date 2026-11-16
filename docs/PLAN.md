@@ -185,9 +185,9 @@ The database is `backend/undercover.db`, which git ignores because of `*.db`. Th
 
 **Why:** this proves the three parts work together on the whole queue, not only on the scripted claims in the tests.
 
-- [ ] `uv run -m backend.seed`, then `uv run -m agent` works all 25 claims and none is left waiting or in progress
-- [ ] Over the run, checked through the API: every approval over $1,000 is `waiting_for_sign_off` with no payment; every approval of $1,000 or less is `decided`; every decline and referral has a payout of 0; every decision has a reason of two or three sentences and a policy section
-- [ ] Playwright MCP: the queue shows the 25 decisions with their statuses. Opening one claim of each kind (approved and paid, waiting for sign-off, declined, referred) shows the decision, the reason and the full steps
-- [ ] `docs/STATUS.md` says what's built and how to run it: `npm run dev`, `uv run -m agent`, `uv run -m agent <claim id>`, `uv run -m backend.seed` and `npm run check`
-- [ ] `npm run check` passes: ruff, pyright, pytest, ESLint, Prettier, tsc, vitest and Playwright, with both coverage thresholds met
-- [ ] Committed, with the pre-commit hook passing
+- [x] `uv run -m backend.seed`, then `uv run -m agent` works all 25 claims and none is left waiting or in progress
+- [x] Over the run, checked through the API: every approval over $1,000 is `waiting_for_sign_off` with no payment; every approval of $1,000 or less is `decided`; every decline and referral has a payout of 0; every decision has a reason of two or three sentences and a policy section
+- [x] Playwright MCP: the queue shows the 25 decisions with their statuses. Opening one claim of each kind (approved and paid, waiting for sign-off, declined, referred) shows the decision, the reason and the full steps
+- [x] `docs/STATUS.md` says what's built and how to run it: `npm run dev`, `uv run -m agent`, `uv run -m agent <claim id>`, `uv run -m backend.seed` and `npm run check`
+- [x] `npm run check` passes: ruff, pyright, pytest, ESLint, Prettier, tsc, vitest and Playwright, with both coverage thresholds met
+- [x] Committed, with the pre-commit hook passing

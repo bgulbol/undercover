@@ -213,14 +213,15 @@ def record_decision(claim_id: str, request: DecisionRequest) -> Claim:
             raise HTTPException(
                 409, f"Claim {claim_id} is {claim.status.replace('_', ' ')}"
             )
-        over_limit = request.decision == "approve" and request.payout > APPROVAL_LIMIT
+        payout = round(request.payout, 2)
+        over_limit = request.decision == "approve" and payout > APPROVAL_LIMIT
         db.execute(
             "UPDATE claims SET status = ?, decision = ?, payout = ?, reason = ?,"
             " policy_section = ?, decided_at = ? WHERE claim_id = ?",
             (
                 "waiting_for_sign_off" if over_limit else "decided",
                 request.decision,
-                round(request.payout, 2),
+                payout,
                 request.reason,
                 request.policy_section,
                 now(),

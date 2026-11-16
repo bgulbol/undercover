@@ -94,6 +94,14 @@ def test_the_status_follows_the_approval_limit(client, payout, status):
     assert claim["decided_at"]
 
 
+def test_the_limit_applies_to_the_payout_in_cents(client):
+    start(client)
+    claim = decide(client, payout=1000.004).json()
+    assert claim["payout"] == 1000.0
+    assert claim["status"] == "decided"
+    assert pay(client, 1000.0).json()["paid_amount"] == 1000.0
+
+
 def test_pay_an_approval_within_the_limit(client):
     start(client)
     decide(client, payout=420.0)
