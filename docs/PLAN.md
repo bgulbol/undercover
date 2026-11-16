@@ -123,13 +123,13 @@ The database is `backend/undercover.db`, which git ignores because of `*.db`. Th
 
 **Why:** the instructions live in the backend so the dashboard can show exactly what the agent runs on. Streaming the steps from `run` keeps the logging in the harness and out of the model's control.
 
-- [ ] Pytest: a scripted stub run on `CLM-1001` reads the claim, the policy, the customer and the wording, approves $420.00 and pays it. Afterwards the claim is `decided` with `paid_amount` 420.0, and its steps list each tool call and result in order, ending with the agent's reply
-- [ ] Pytest: a scripted stub run that approves $1,150.00 and then calls `pay_claim` gets a tool result saying the payment is refused until a handler signs off. The claim ends `waiting_for_sign_off` with no payment
-- [ ] Pytest: `uv run -m agent`'s entry point runs only the waiting claims, or only the ids it's given
-- [ ] `GET /api/instructions` returns the text of `backend/instructions.md`
-- [ ] With `npm run dev` running, `uv run -m agent CLM-1001` (one real model call chain, a few cents at most) prints a decision. `GET /api/claims/CLM-1001` then shows a decision with a reason of two or three sentences and a policy section, and `GET /api/claims/CLM-1001/steps` lists the steps in order
-- [ ] `npm run check:python` passes with coverage at 80% or more
-- [ ] Committed, with the pre-commit hook passing
+- [x] Pytest: a scripted stub run on `CLM-1001` reads the claim, the policy, the customer and the wording, approves $420.00 and pays it. Afterwards the claim is `decided` with `paid_amount` 420.0, and its steps list each tool call and result in order, ending with the agent's reply
+- [x] Pytest: a scripted stub run that approves $1,150.00 and then calls `pay_claim` gets a tool result saying the payment is refused until a handler signs off. The claim ends `waiting_for_sign_off` with no payment
+- [x] Pytest: `uv run -m agent`'s entry point runs only the waiting claims, or only the ids it's given
+- [x] `GET /api/instructions` returns the text of `backend/instructions.md`
+- [x] With `npm run dev` running, `uv run -m agent CLM-1001` (one real model call chain, a few cents at most) prints a decision. `GET /api/claims/CLM-1001` then shows a decision with a reason of two or three sentences and a policy section, and `GET /api/claims/CLM-1001/steps` lists the steps in order
+- [x] `npm run check:python` passes with coverage at 80% or more
+- [x] Committed, with the pre-commit hook passing
 
 ## Phase 4: the dashboard and the queue
 

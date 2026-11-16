@@ -5,6 +5,7 @@ import sqlite3
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
+from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
 
@@ -14,6 +15,7 @@ from backend.models import (
     ClaimSummary,
     Customer,
     DecisionRequest,
+    Instructions,
     PaymentRequest,
     Policy,
     PolicyWording,
@@ -25,6 +27,7 @@ from backend.seed import seed
 
 COMPANY = json.loads((DATA / "company.json").read_text(encoding="utf-8"))
 APPROVAL_LIMIT: float = COMPANY["payout_approval_limit"]
+INSTRUCTIONS = Path(__file__).parent / "instructions.md"
 
 
 @asynccontextmanager
@@ -81,12 +84,12 @@ def check_payment(claim: Claim, amount: float) -> None:
         )
 
 
-def fetch_record(query: str, record_id: str) -> str:
-    """Return the JSON record that the query finds, or a 404."""
+def fetch_record(query: str, kind: str, record_id: str) -> str:
+    """Return the JSON record that the query finds, or a 404 that names its kind."""
     with connect() as db:
         row = db.execute(query, (record_id,)).fetchone()
     if row is None:
-        raise HTTPException(404, f"There is no record {record_id}")
+        raise HTTPException(404, f"There is no {kind} {record_id}")
     return row["record"]
 
 
@@ -122,7 +125,9 @@ def get_claim(claim_id: str) -> Claim:
 @app.get("/api/policies/{policy_id}", operation_id="get_policy")
 def get_policy(policy_id: str) -> Policy:
     """Get a policy: the plan, add-ons, trip and travelers."""
-    record = fetch_record("SELECT record FROM policies WHERE policy_id = ?", policy_id)
+    record = fetch_record(
+        "SELECT record FROM policies WHERE policy_id = ?", "policy", policy_id
+    )
     return Policy.model_validate_json(record)
 
 
@@ -130,7 +135,7 @@ def get_policy(policy_id: str) -> Policy:
 def get_customer(customer_id: str) -> Customer:
     """Get a customer's name and claim history."""
     record = fetch_record(
-        "SELECT record FROM customers WHERE customer_id = ?", customer_id
+        "SELECT record FROM customers WHERE customer_id = ?", "customer", customer_id
     )
     return Customer.model_validate_json(record)
 
@@ -142,6 +147,12 @@ def get_policy_wording() -> PolicyWording:
         version=COMPANY["policy_wording_version"],
         text=(DATA / "policy_wording.md").read_text(encoding="utf-8"),
     )
+
+
+@app.get("/api/instructions", operation_id="get_instructions")
+def get_instructions() -> Instructions:
+    """Get the instructions the agent works from."""
+    return Instructions(text=INSTRUCTIONS.read_text(encoding="utf-8"))
 
 
 @app.post("/api/claims/{claim_id}/start", operation_id="start_claim")

@@ -59,11 +59,11 @@ def test_get_policy_wording(client):
 
 
 def test_unknown_ids_are_not_found(client):
-    for path in (
-        "/api/claims/CLM-9999",
-        "/api/policies/POL-9999",
-        "/api/customers/CUS-9999",
+    for path, detail in (
+        ("/api/claims/CLM-9999", "There is no claim CLM-9999"),
+        ("/api/policies/POL-9999", "There is no policy POL-9999"),
+        ("/api/customers/CLM-1001", "There is no customer CLM-1001"),
     ):
         response = client.get(path)
         assert response.status_code == 404
-        assert "9999" in response.json()["detail"]
+        assert response.json()["detail"] == detail
