@@ -95,15 +95,15 @@ The database is `backend/undercover.db`, which git ignores because of `*.db`. Th
 
 **Why:** the rules live in the backend, so they hold whatever the agent does. Testing them before the agent exists shows the block works without a model in the loop.
 
-- [ ] Pytest: starting a waiting claim makes it `in_progress` and records the thread; starting it again with a new thread works; starting a decided claim or one waiting for sign-off returns 409
-- [ ] Pytest: `record_decision` on a claim that isn't in progress returns 409; an approval with payout 0 returns 422; a decline with a payout above 0 returns 422
-- [ ] Pytest: approving $420.00 makes the claim `decided`; approving exactly $1,000.00 makes it `decided`; approving $1,000.01 makes it `waiting_for_sign_off`
-- [ ] Pytest: `pay_claim` of $420.00 on that approval records the payment; paying again returns 409; paying $400.00 against an approval of $420.00 returns 409; paying a declined claim returns 409
-- [ ] Pytest: `pay_claim` of $1,150.00 on an approval of $1,150.00 returns 403 with a message that a handler must sign off, and afterwards the claim has no payment and is still `waiting_for_sign_off`
-- [ ] Pytest: steps come back in the order they were added, and only for the claim's latest thread
-- [ ] Against the running backend: `POST /api/claims/CLM-1002/start`, `POST /api/claims/CLM-1002/decision` approving $1,150.00, then `POST /api/claims/CLM-1002/payment` with 1150 returns 403, and `GET /api/claims/CLM-1002` shows `waiting_for_sign_off` with `paid_amount` null. Then `uv run -m backend.seed` resets the queue
-- [ ] `npm run check:python` passes with coverage at 80% or more
-- [ ] Committed, with the pre-commit hook passing
+- [x] Pytest: starting a waiting claim makes it `in_progress` and records the thread; starting it again with a new thread works; starting a decided claim or one waiting for sign-off returns 409
+- [x] Pytest: `record_decision` on a claim that isn't in progress returns 409; an approval with payout 0 returns 422; a decline with a payout above 0 returns 422
+- [x] Pytest: approving $420.00 makes the claim `decided`; approving exactly $1,000.00 makes it `decided`; approving $1,000.01 makes it `waiting_for_sign_off`
+- [x] Pytest: `pay_claim` of $420.00 on that approval records the payment; paying again returns 409; paying $400.00 against an approval of $420.00 returns 409; paying a declined claim returns 409
+- [x] Pytest: `pay_claim` of $1,150.00 on an approval of $1,150.00 returns 403 with a message that a handler must sign off, and afterwards the claim has no payment and is still `waiting_for_sign_off`
+- [x] Pytest: steps come back in the order they were added, and only for the claim's latest thread
+- [x] Against the running backend: `POST /api/claims/CLM-1002/start`, `POST /api/claims/CLM-1002/decision` approving $1,150.00, then `POST /api/claims/CLM-1002/payment` with 1150 returns 403, and `GET /api/claims/CLM-1002` shows `waiting_for_sign_off` with `paid_amount` null. Then `uv run -m backend.seed` resets the queue
+- [x] `npm run check:python` passes with coverage at 80% or more
+- [x] Committed, with the pre-commit hook passing
 
 ## Phase 3: the UnderCover Agent
 

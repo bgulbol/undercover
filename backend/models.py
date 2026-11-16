@@ -1,11 +1,12 @@
 """The shapes of the records the API reads and writes."""
 
-from typing import Literal
+from typing import Literal, Self
 
-from pydantic import BaseModel
+from pydantic import BaseModel, model_validator
 
 Status = Literal["waiting", "in_progress", "waiting_for_sign_off", "decided"]
 Decision = Literal["approve", "decline", "refer"]
+StepKind = Literal["message", "tool_call", "tool_result"]
 
 
 class Item(BaseModel):
@@ -95,3 +96,40 @@ class Customer(BaseModel):
 class PolicyWording(BaseModel):
     version: str
     text: str
+
+
+class StartRequest(BaseModel):
+    thread_id: str
+
+
+class StepRequest(BaseModel):
+    thread_id: str
+    kind: StepKind
+    name: str
+    content: str
+
+
+class Step(StepRequest):
+    step_id: int
+    claim_id: str
+    created_at: str
+
+
+class DecisionRequest(BaseModel):
+    decision: Decision
+    payout: float
+    reason: str
+    policy_section: str
+
+    @model_validator(mode="after")
+    def payout_fits_decision(self) -> Self:
+        """Only an approval pays, and it pays something."""
+        if self.decision == "approve" and self.payout <= 0:
+            raise ValueError("An approval needs a payout above zero")
+        if self.decision != "approve" and self.payout != 0:
+            raise ValueError("A decline or a referral has a payout of zero")
+        return self
+
+
+class PaymentRequest(BaseModel):
+    amount: float
