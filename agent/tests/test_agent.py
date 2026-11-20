@@ -1,7 +1,7 @@
 import pytest
 from langchain_core.language_models.fake_chat_models import GenericFakeChatModel
 from langchain_core.messages import AIMessage, BaseMessage, SystemMessage
-from pydantic import Field
+from pydantic import Field, SecretStr
 
 from agent import main
 from backend.main import INSTRUCTIONS, app
@@ -144,7 +144,35 @@ def test_run_will_not_start_a_decided_claim(client):
 
 def test_model_name(monkeypatch):
     monkeypatch.setenv("OPENROUTER_API_KEY", "test-key")
+    monkeypatch.delenv("MODEL_BASE_URL", raising=False)
     monkeypatch.delenv("MODEL_NAME", raising=False)
     assert main.model().model_name == "openai/gpt-6-luna"
     monkeypatch.setenv("MODEL_NAME", "openrouter/free")
     assert main.model().model_name == "openrouter/free"
+
+
+def api_key(llm):
+    """The key a chat model will send, as text."""
+    key = llm.openai_api_key
+    assert isinstance(key, SecretStr)
+    return key.get_secret_value()
+
+
+def test_model_on_another_server(monkeypatch):
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
+    monkeypatch.delenv("MODEL_API_KEY", raising=False)
+    monkeypatch.setenv("MODEL_BASE_URL", "http://localhost:11434/v1")
+    monkeypatch.setenv("MODEL_NAME", "qwen3.5:4b")
+    llm = main.model()
+    assert llm.model_name == "qwen3.5:4b"
+    assert llm.openai_api_base == "http://localhost:11434/v1"
+    assert api_key(llm) == "none"
+    monkeypatch.setenv("MODEL_API_KEY", "pod-key")
+    assert api_key(main.model()) == "pod-key"
+
+
+def test_model_on_another_server_needs_a_name(monkeypatch):
+    monkeypatch.setenv("MODEL_BASE_URL", "http://localhost:11434/v1")
+    monkeypatch.delenv("MODEL_NAME", raising=False)
+    with pytest.raises(RuntimeError, match="MODEL_NAME"):
+        main.model()

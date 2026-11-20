@@ -110,8 +110,23 @@ TOOLS = [
 
 
 def model() -> ChatOpenAI:
-    """Return the model named in MODEL_NAME, or GPT-6 Luna by default."""
+    """Return the model to run the agent on.
+
+    OpenRouter by default: GPT-6 Luna, or the model named in MODEL_NAME. Set
+    MODEL_BASE_URL to use any other server with an OpenAI-compatible API, such as
+    Ollama on this computer or vLLM on a rented GPU. Then MODEL_NAME is the model
+    that server serves, and MODEL_API_KEY is its key if it needs one.
+    """
     name = os.getenv("MODEL_NAME")
+    base_url = os.getenv("MODEL_BASE_URL")
+    if base_url:
+        if not name:
+            raise RuntimeError("MODEL_BASE_URL is set, so set MODEL_NAME too")
+        return ChatOpenAI(
+            model=name,
+            base_url=base_url,
+            api_key=SecretStr(os.getenv("MODEL_API_KEY") or "none"),
+        )
     return ChatOpenAI(
         model=name or DEFAULT_MODEL,
         base_url=OPENROUTER_BASE_URL,
